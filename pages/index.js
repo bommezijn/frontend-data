@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import svgstyle from '../styles/SVG.module.css'
 
 export default function Home() {
   return (
@@ -22,25 +23,40 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
+
+          <div className={styles.card}>
+            <h2>Create your own SVG</h2>
+            <svg width='300' height='250' className={svgstyle.example}>
+              <g>
+                <g className={svgstyle.eyes}>
+                  <rect x="10" y="40" width="100" height="40"></rect>
+                  <rect x="130" y="40" width="100" height="40"></rect>
+                </g>
+                <rect className={svgstyle.mouth} x="40" y="130" width="150" height="25"></rect>
+              </g>
+
+            </svg>
+          </div>  
+
+          {/* <a href="https://nextjs.org/docs" className={styles.card}>
             <h2>Documentation &rarr;</h2>
             <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+          </a> */}
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
+          {/* <a href="https://nextjs.org/learn" className={styles.card}>
             <h2>Learn &rarr;</h2>
             <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+          </a> */}
 
-          <a
+          {/* <a
             href="https://github.com/vercel/next.js/tree/master/examples"
             className={styles.card}
           >
             <h2>Examples &rarr;</h2>
             <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+          </a> */}
 
-          <a
+          {/* <a
             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             className={styles.card}
           >
@@ -48,7 +64,7 @@ export default function Home() {
             <p>
               Instantly deploy your Next.js site to a public URL with Vercel.
             </p>
-          </a>
+          </a> */}
         </div>
       </main>
 
