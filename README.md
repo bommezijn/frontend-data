@@ -1,6 +1,6 @@
 
 <!-- Add badges from somewhere like: [shields.io](https://shields.io/) -->
-[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/) 
+[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/) [![gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](https://gitmoji.dev)
 <!-- [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) -->
 
 
@@ -16,6 +16,10 @@ This course is specifically given by the Hogeschool van Amsterdam CMD. More info
 
 ## Technical requirements
 
+### Conventions
+For GIT I am using the a convention called gitmojis. The convention is to structure your GIT commits but also to visually see what a commit does without reading the commit.
+
+To read more about this convention visit [the repo](https://github.com/carloscuesta/gitmoji).
 ## Run Locally
 
 ## Documentation
