@@ -23,48 +23,29 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-
-          <div className={styles.card}>
+          <div className={`${styles.card} ${svgstyle.svgExample}`}>
             <h2>Create your own SVG</h2>
             <svg width='300' height='250' className={svgstyle.example}>
               <g>
                 <g className={svgstyle.eyes}>
-                  <rect x="10" y="40" width="100" height="40"></rect>
-                  <rect x="130" y="40" width="100" height="40"></rect>
+                  <g className={svgstyle.eye}>
+                    <rect x="10" y="60" width="33" height="40"></rect>
+                    <rect x="43" y="60" width="33" height="40"></rect>
+                    <rect x="76" y="60" width="33" height="40"></rect>
+                  </g>
+                  <g className={svgstyle.eye}>
+                    <rect x="130" y="60" width="33" height="40"></rect>
+                    <rect x="163" y="60" width="33" height="40"></rect>
+                    <rect x="196" y="60" width="33" height="40"></rect>
+                  </g>
                 </g>
-                <rect className={svgstyle.mouth} x="40" y="130" width="150" height="25"></rect>
               </g>
-
             </svg>
-          </div>  
-
-          {/* <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a> */}
-
-          {/* <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a> */}
-
-          {/* <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a> */}
-
-          {/* <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a> */}
+            <p className={svgstyle.title}>Sad Man</p>
+          </div>
+          <div className={styles.card}>
+            <h2></h2>
+          </div>
         </div>
       </main>
 

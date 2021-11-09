@@ -1,13 +1,17 @@
-.example {
+.svgExample .example {
   width: 100%;
-  max-width: 250px;
-  height: 100%;
   max-height: 200px;
-  /* background-color: #ffcc00; */
-  background-color: #161616;
-  /* border-radius: 50% 50%; */
+  background-color: #0D0D0D;
 }
 
-.eyes {
-  fill: white;
+.svgExample .eyes {
+  fill: #E078FA;
+}
+
+.svgExample .eye rect:nth-child(even) {
+  fill: #CB00FA;
+}
+
+.svgExample .title {
+  text-align: center;
 }
