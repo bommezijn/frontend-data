@@ -1,6 +1,12 @@
 console.log('hello JS')
-const URL = `https://www.fruityvice.com/`
-const endpoint = `api/fruit/all`
+
+const dimensions = {
+  margin: {t: 40, b: 10, l: 120, r:20},
+  get width(){return 800 - this.margin.l - this.margin.r},
+  get height(){return 600 - this.margin.b - this.margin.t},
+}
+
+const FAKEDATA = [33, 88, 54, 102, 55];
 
 function getData() {
   fetch(`${URL}${endpoint}`)
@@ -8,29 +14,23 @@ function getData() {
     .then(data => console.table(data))
 }
 
+const SVG = d3.select('body').append('svg')
+  .attr('width', dimensions.width)
+  .attr('height', dimensions.height)
+  .attr('border', '1px solid black')
 
-/* Select the element div and set the text or html */
-// d3.select('text').text('Hello') //Doesn't do anything?
-d3.select('div').text('Hello')
+const GROUP = SVG.append('g')
+  .attr('transform', `translate(${dimensions.margin.l}, ${dimensions.margin.t})`)
 
-const svg = d3.select('svg')
-svg.style("border", "1px solid black")
+const RECTANGLE =
+  GROUP.selectAll('rect').data(FAKEDATA).join(
+    (enter) => enter.append('rect').attr('x',0),
+    (update) => update,
+    (exit) => exit.remove()
+  );
 
-/* const circle = d3.select('circle')
-circle
-  .attr("r", 10)
-  .attr("cx", 10)
-  .attr("cy", 10)
-  .style("stroke-width", 2)
-  .style("fill", '#ffcc00') */
-
-for (let index = 0; index < 3; index++) {
-  let coords = Math.round(Math.random()*100)
-  svg.append('circle')
-    .attr("r", 10)
-    .attr("cx", 100)
-    .attr("cy", coords)
-    .style("stroke-width", 2)
-    .style("stroke", "black")
-    .style("fill", '#ffcc00')
-}
+  RECTANGLE
+    .attr('height', 50)
+    .attr('width', (d) => d * 7)
+    .attr('y', (d,i) => i*(50+5))
+    .attr('class', 'bars')

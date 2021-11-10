@@ -1,3 +1,10 @@
 * {
   font-family: 'Open Sans', sans-serif;
 }
+svg {
+  transform: translate(40,40);
+}
+
+.bars {
+  fill: url(#my-cool-gradient) #447799;
+}
