@@ -1,14 +1,8 @@
 console.log('hello JS')
 
-const dimensions = {
-  margin: {t: 40, b: 10, l: 120, r:20},
-  get width(){return 800 - this.margin.l - this.margin.r},
-  get height(){return 600 - this.margin.b - this.margin.t},
-}
-
 const FAKEDATA = [33, 88, 54, 102, 55];
 async function main() {
-  const data = d3.json('https://api.themoviedb.org/3/person/popular?api_key=63b8e2e812b6172f220bb5bb9aab2dea')
+  const data = await d3.json('https://api.themoviedb.org/3/person/popular?api_key=63b8e2e812b6172f220bb5bb9aab2dea')
     .then(
       data => {
         return data.results.map(x => {
@@ -21,6 +15,17 @@ async function main() {
       })
     })
 
+    return data
+  }
+
+const dimensions = {
+  margin: {t: 40, b: 10, l: 120, r:20},
+  get width(){return 800 - this.margin.l - this.margin.r},
+  get height(){return 600 - this.margin.b - this.margin.t},
+}
+
+
+const createGraph = async () => {
   const SVG = d3.select('body').append('svg')
     .attr('width', dimensions.width)
     .attr('height', dimensions.height)
@@ -30,22 +35,23 @@ async function main() {
     .attr('transform', `translate(${dimensions.margin.l}, ${dimensions.margin.t})`)
 
 
-    const RECTANGLE =
+  const RECTANGLE =
     GROUP.selectAll('rect')
-      .data(await data)
+      .data(await main())
       .join(
         (enter) => enter.append('rect').attr('x',0),
         (update) => update,
         (exit) => exit.remove()
-    );
+      );
 
-    RECTANGLE
+  RECTANGLE
     .attr('height', 50)
     .attr('width', (d) => d.rating * 7)
     .attr('y', (d,i) => i*(50+5))
     .attr('class', 'bars')
 }
 
-main()
+
+createGraph()
 
 
