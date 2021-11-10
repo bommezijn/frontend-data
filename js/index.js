@@ -28,10 +28,9 @@ for (let index = 0; index < 3; index++) {
   let coords = Math.round(Math.random()*100)
   svg.append('circle')
     .attr("r", 10)
-    .attr("cx", coords)
-    .attr("cy", coords*2)
+    .attr("cx", 100)
+    .attr("cy", coords)
     .style("stroke-width", 2)
     .style("stroke", "black")
     .style("fill", '#ffcc00')
-  
 }
