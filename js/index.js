@@ -1,10 +1,18 @@
 console.log('hello JS')
 
-const FAKEDATA = [33, 88, 54, 102, 55];
-async function main() {
-  const data = await d3.json('https://api.themoviedb.org/3/person/popular?api_key=63b8e2e812b6172f220bb5bb9aab2dea')
+const dimensions = {
+  margin: {t: 40, b: 10, l: 120, r:20},
+  get width(){return 800 - this.margin.l - this.margin.r},
+  get height(){return 600 - this.margin.b - this.margin.t},
+  barHeight: 20
+}
+
+/* Async / then function that retrieves data and creates consumable objects, returns promise */
+async function getData() {
+  const data = await d3.json('https://api.themoviedb.org/3/person/popular?api_key=')
     .then(
       data => {
+        console.log(data.results)
         return data.results.map(x => {
         const actor = {
           name: x.name,
@@ -18,40 +26,69 @@ async function main() {
     return data
   }
 
-const dimensions = {
-  margin: {t: 40, b: 10, l: 120, r:20},
-  get width(){return 800 - this.margin.l - this.margin.r},
-  get height(){return 600 - this.margin.b - this.margin.t},
-}
+/* Extended variant of creating chart, modularized per step */
+// // Create SVG container and returns the element
+// const createSVG = () => {
+//   const SVG = d3.select('body').append('svg')
+//     .attr('width', dimensions.width)
+//     .attr('height', dimensions.height)
+//     .style('border', '1px solid black')
+//   return SVG
+// }
 
+// // Create group that houses the graph
+// const createGroup = (parent) => {
+//   const GROUP = parent.append('g')
+//     .attr('transform', `translate(${dimensions.margin.l}, ${dimensions.margin.t})`)
+//   return GROUP
+// }
 
-const createGraph = async () => {
-  const SVG = d3.select('body').append('svg')
-    .attr('width', dimensions.width)
-    .attr('height', dimensions.height)
-    .attr('border', '1px solid black')
+// // Create graph function, requires SVG, group and async data 
+// const createGraph = async () => {
+//   const GROUP = createGroup(createSVG())
 
-  const GROUP = SVG.append('g')
-    .attr('transform', `translate(${dimensions.margin.l}, ${dimensions.margin.t})`)
+// // Create future reference for the bar chart within a group, enter data and join it.
+//   const RECTANGLE =
+//     GROUP.selectAll('rect')
+//       .data(await getData())
+//       .join(
+//         (enter) => enter.append('rect'),
+//         (update) => update,
+//         (exit) => exit.remove()
+//       );
 
+//   //style rectangles
+//   RECTANGLE
+//     .attr('height', dimensions.barHeight)
+//     .attr('width', (d) => d.rating * 5)
+//     .attr('y', (d,i) => i*(dimensions.barHeight + 5))
+//     .attr('class', 'bars')
+// }
 
-  const RECTANGLE =
-    GROUP.selectAll('rect')
-      .data(await main())
-      .join(
-        (enter) => enter.append('rect').attr('x',0),
-        (update) => update,
-        (exit) => exit.remove()
-      );
+// createGraph()
 
-  RECTANGLE
-    .attr('height', 50)
-    .attr('width', (d) => d.rating * 7)
-    .attr('y', (d,i) => i*(50+5))
+/* Shorthand IIFE bar chart graph */
+(async () => {
+  d3.select('body')
+    .append('svg')
+    .attr('height', '80vh')
+    .attr('width', '100%')
+    .style('border', '1px solid black')
+    .append('g')
+    .attr('transform', 'translate(20, 20)')
+    .selectAll('rect')
+    .data(await getData())
+    .join(
+      (enter) => {
+        const rectangle = enter.append('rect')
+          .attr('x', 0)
+          rectangle.append('title')
+        return rectangle
+      }
+    )
+    .attr('height', dimensions.barHeight)
+    .attr('width', d => d.rating * 5)
+    .attr('y', (d,i) => i*(dimensions.barHeight+5))
     .attr('class', 'bars')
-}
-
-
-createGraph()
-
-
+    .select('title').text(d => d.rating)
+})();
