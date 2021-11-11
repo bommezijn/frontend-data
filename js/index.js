@@ -8,23 +8,37 @@ const dimensions = {
 }
 
 /* Async / then function that retrieves data and creates consumable objects, returns promise */
-async function getData() {
-  const data = await d3.json('https://api.themoviedb.org/3/person/popular?api_key=')
-    .then(
-      data => {
-        console.log(data.results)
-        return data.results.map(x => {
-        const actor = {
-          name: x.name,
-          mugshot: x.profile_path,
-          rating: x.popularity
-        }
-        return actor
-      })
-    })
+// async function getData() {
+//   const data = await d3.json('https://api.themoviedb.org/3/person/popular?api_key=')
+//     .then(
+//       data => {
+//         console.log(data.results)
+//         return data.results.map(x => {
+//         const actor = {
+//           name: x.name,
+//           mugshot: x.profile_path,
+//           rating: x.popularity
+//         }
+//         return actor
+//       })
+//     })
 
-    return data
+//     return data
+//   }
+
+// Pure Async data retrieval function with proper error handling
+const retrieveData = async () => {
+  try {
+    const test = await d3.json('https://api.themoviedb.org/3/person/popular?api_key=')
+    return await test.results.map(x => {
+      const celeb = {name: x.name, mugshot: x.profile_path, rating: x.popularity}
+      return celeb
+    })
+  } catch (error) {
+    console.log(error)
+    d3.select('body').append('h1').text('no Data')
   }
+}
 
 /* Extended variant of creating chart, modularized per step */
 // // Create SVG container and returns the element
@@ -77,7 +91,7 @@ async function getData() {
     .append('g')
     .attr('transform', 'translate(20, 20)')
     .selectAll('rect')
-    .data(await getData())
+    .data(await retrieveData())
     .join(
       (enter) => {
         const rectangle = enter.append('rect')
