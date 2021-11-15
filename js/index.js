@@ -1,148 +1,73 @@
-const dimensions = {
-  barHeight: 20,
-  margin: {t: 40, b: 10, l: 120, r:20},
-  get height(){return 600 - this.margin.b - this.margin.t},
-  get width(){return window.innerWidth - this.margin.r},
-  // get width(){return 800 - this.margin.l - this.margin.r},
-}
+console.log(`%cHello World`, `color: #ffcc00; font-weight: bold;`)
+import getData from './modules/data.js';
+import {dim, createSVG} from './modules/svg.js'
 
-// Pure Async data retrieval function with proper error handling
-const retrieveData = async () => {
-  try {
-    const test = await d3.json('https://api.themoviedb.org/3/person/popular?api_key=63b8e2e812b6172f220bb5bb9aab2dea')
-    return await test.results.map(x => {
-      const celeb = {name: x.name, mugshot: x.profile_path, rating: x.popularity}
-      return celeb
-    })
-  } catch (error) {
-    console.log(error)
-    d3.select('body').append('h1').text('no Data')
-  }
-}
+const SVG = createSVG()
 
-/* Extended variant of creating chart, modularized per step */
-// Create SVG container and returns the element
-const createSVG = () => {
-  const SVG = d3.select('body').append('svg')
-    .attr('width', dimensions.width)
-    .attr('height', dimensions.height)
-    // .attr('viewBox', `0 0 ${dimensions.width} ${dimensions.height}`)
-    .style('border', '1px solid black')
-    .style('padding', `10px 10px`)
-  return SVG
-}
+const API = 'https://api.themoviedb.org/3/person/popular?api_key=63b8e2e812b6172f220bb5bb9aab2dea'
 
-// Create group that houses the graph
+const dataset = getData(API).then(whole =>
+  whole.map(specified => {
+    const CELEB = {
+      name: specified.name,
+      mug: specified.profile_path,
+      rating: Math.round(specified.popularity)
+    }
+    return CELEB
+  })
+).catch(e => {
+  console.error(e);
+  d3.select('body').append('p').text('error in data fetching')
+})
+
+// const createGroup = SVG.append('g')
 const createGroup = (parent) => {
-  const GROUP = parent.append('g')
-    // .attr('transform', `translate(${dimensions.margin.l}, ${dimensions.margin.t})`) //uncomment for padding
-  return GROUP
+  return parent.append('g')
+    // .attr('transform', `translate(${dim.margin.l} ${dim.margin.t})`)
 }
 
-// Create scales
-// const scale = (data) => {
-//   d3.scaleBand().domain([0,1,2,3,4,5,6,7,8,9,10]).range([0,100])
-//   // d3.scaleBand().domain(d3.extent(data)).range([0,100])
-// }
+const createAxis = (data) => {
+  /* Create X axis based on the value from rating */
+  const X_AXIS = d3.scaleLinear()
+    .domain(d3.extent(data, d => d.rating))
+    .range([0, dim.width]);
 
-const scale = d3.scaleLinear().domain([0,10]).range([0,dimensions.width - dimensions.margin.l]) //use width for length of scale
-  // d3.scaleBand().domain(d3.extent([0,10])).range([0,100])
-// Create axis
-const xAxis = d3.axisBottom().scale(scale)
+  SVG.append('g')
+    .attr('transform', `translate(0, ${dim.height - dim.margin.t})`)
+    .call(d3.axisBottom(X_AXIS))
 
-/* 
-  BEGIN example
-  https://bl.ocks.org/d3noob/c506ac45617cf9ed39337f99f8511218
-*/
-var x = d3.scaleLinear().range([0, dimensions.width]);
-var y = d3.scaleLinear().range([dimensions.height, 0]);
-// gridlines in x axis function
-function make_x_gridlines() {		
-  return d3.axisBottom(x)
-      .ticks(10)
-}
-// gridlines in y axis function
-function make_y_gridlines() {		
-  return d3.axisLeft(y)
-      .ticks(10)
-}
-/* 
-END example
-*/
-
-// Create graph function, requires SVG, group and async data 
-const createGraph = async () => {
-  const GROUP = createGroup(createSVG())
-
-  GROUP.append('g').classed('x.axis', true).attr("transform", `translate(0, ${dimensions.height - dimensions.margin.t})`).call(xAxis) //Plot scale with height - 20 // x axis
-
-/* 
-  BEGIN example
-  https://bl.ocks.org/d3noob/c506ac45617cf9ed39337f99f8511218
-*/
-  GROUP.append("g")			
-  .attr("class", "grid")
-  .attr("transform", `translate(0,${dimensions.height})`)
-  .call(make_x_gridlines()
-      .tickSize(-dimensions.height)
-      .tickFormat("")
-  )
-  GROUP.append("g")			
-  .attr("class", "grid")
-  .call(make_y_gridlines()
-      .tickSize(-dimensions.width)
-      .tickFormat("")
-  )
-  /* 
-    END example 
-  */
-// Create future reference for the bar chart within a group, enter data and join it.
-  const RECTANGLE =
-    GROUP.selectAll('rect')
-      .data(await retrieveData())
-      .join(
-        (enter) => {
-          const r = enter.append('rect')
-          r.append('title')
-          return r},
-        (update) => update,
-        (exit) => exit.remove()
-      );
-
-  //style rectangles
-  RECTANGLE
-    .attr('height', dimensions.barHeight)
-    .attr('width', (d) => d.rating * 5)
-    .attr('y', (d,i) => i*(dimensions.barHeight + 5))
-    .attr('class', 'bars')
-    .select('title').text(d => d.rating)
-
+  /* Create Y axis based on the value from ... */
+  // const Y_AXIS = d3.scaleLinear()
+  //   .domain(d3.extent(data, d => ))
+  return {X_AXIS};
 }
 
-createGraph()
+const populate = async () => {
+  const {X_AXIS} = createAxis(await dataset) 
 
-/* Shorthand IIFE bar chart graph */
-// (async () => {
-//   d3.select('body')
-//     .append('svg')
-//     .attr('height', '80vh')
-//     .attr('width', '100%')
-//     .style('border', '1px solid black')
-//     .append('g')
-//     .attr('transform', 'translate(20, 20)')
-//     .selectAll('rect')
-//     .data(await retrieveData())
-//     .join(
-//       (enter) => {
-//         const rectangle = enter.append('rect')
-//           .attr('x', 0)
-//           rectangle.append('title')
-//         return rectangle
-//       }
-//     )
-//     .attr('height', dimensions.barHeight)
-//     .attr('width', d => d.rating * 5)
-//     .attr('y', (d,i) => i*(dimensions.barHeight+5))
-//     .attr('class', 'bars')
-//     .select('title').text(d => d.rating)
-// })();
+  // console.log(await dataset)
+  const rectangles =  createGroup(SVG)
+    .selectAll('rect')
+    .data(await dataset)
+    .join(
+      (enter) => {
+        const r = enter.append('rect')
+        r.append('title')
+        return r
+      },
+      (update) => update,
+      (exit) => exit.remove()
+    )
+  
+  const cscale = d3.scaleOrdinal().domain(d3.extent(await dataset, d=> d.rating)).range(['green', 'red']);
+
+  rectangles
+    .attr('height', 20) //a predefined value for the height of a single data bar
+    .attr('width', (d) => {return d.rating * 7})
+    .attr('x', 0)
+    .attr('y', (d,i) => {return i * (20 + 5)})
+    .attr('fill', (d) => cscale(d))
+    .select('title').text(d => {return d.rating})
+}
+
+populate()

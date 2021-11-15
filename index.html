@@ -12,16 +12,16 @@
   
 </head>
 <body>
-  <!-- <h1>Hello World</h1> -->
-  <!-- <svg width="100%" height="100%"> <!-- <svg width="100%" height="100%"viewBox="0 0 100 100"> -->
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-  <script src="./js/index.js"></script>
-  <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
-    <linearGradient id="my-cool-gradient" x2="1" y2="1">
-      <stop offset="0%" stop-color="#EE7267" />
-      <stop offset="100%" stop-color="#B13126" />
-      <!-- <stop offset="100%" stop-color="#112266" /> -->
-    </linearGradient>
-  </svg>
+  <script type="module">
+
+    import {interpolateYlGn} from "https://cdn.skypack.dev/d3-scale-chromatic@3";
+    
+    const yellow = interpolateYlGn(0); // "rgb(255, 255, 229)"
+    const yellowGreen = interpolateYlGn(0.5); // "rgb(120, 197, 120)"
+    const green = interpolateYlGn(1); // "rgb(0, 69, 41)"
+    
+    </script>
+  <script type="module" src="./js/index.js"></script>
 </body>
 </html>
