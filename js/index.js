@@ -32,18 +32,20 @@ const createAxis = (data) => {
     .domain(d3.extent(data, d => d.rating))
     .range([0, dim.width]);
 
+  // Add X axis to the bottom axis
   SVG.append('g')
   .attr('transform', `translate(0,  ${dim.height - dim.margin.t})`) //push scale down
   .call(d3.axisBottom(X_AXIS))
   
   /* Create Y axis based on the value from name */
+  const Y_AXIS = d3.scaleBand() //shouldn't be ordinal but scaleband, not sure why but it works.
+    .domain(data.map(d => {return d.name}))
+    .range([0, dim.height]) //Depending on the starting value the data gets sorted U -> D or D-> U
 
-  const Y_AXIS = d3.scaleOrdinal()
-    .domain(data, data.map(d => {return d.name}))
-    .range([dim.height, 0])
-
+  // Add Y axis to the right
   SVG.append('g')
-    .call(d3.axisRight(Y_AXIS))
+    .call(d3.axisLeft(Y_AXIS))
+    .attr('transform', `translate(${dim.width - dim.margin.r})`)
 
   return {X_AXIS, Y_AXIS};
 }
@@ -71,7 +73,7 @@ const populate = async () => {
     .attr('height', 20) //a predefined value for the height of a single data bar
     .attr('width', (d) => {return d.rating * 7})
     .attr('x', 0)
-    .attr('y', (d,i) => {return i * (20 + 5)})
+    .attr('y', (d,i) => {return i * (20 + 5)}) //The 5 is the padding between. Should be done differently
     .attr('fill', (d) => cscale(d))
     .select('title').text(d => {return d.rating})
   }
