@@ -36,10 +36,16 @@ const createAxis = (data) => {
     .attr('transform', `translate(0, ${dim.height - dim.margin.t})`)
     .call(d3.axisBottom(X_AXIS))
 
-  /* Create Y axis based on the value from ... */
-  // const Y_AXIS = d3.scaleLinear()
-  //   .domain(d3.extent(data, d => ))
-  return {X_AXIS};
+  /* Create Y axis based on the value from name */
+
+  const Y_AXIS = d3.scaleOrdinal()
+    .domain(data.map(d => {return d.name}))
+    .range([0, dim.height])
+
+  SVG.append('g')
+    .call(d3.axisLeft(Y_AXIS))
+
+  return {X_AXIS, Y_AXIS};
 }
 
 const populate = async () => {
