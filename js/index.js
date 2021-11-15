@@ -40,7 +40,7 @@ const createAxis = (data) => {
   /* Create Y axis based on the value from name */
   const Y_AXIS = d3.scaleBand() //shouldn't be ordinal but scaleband, not sure why but it works.
     .domain(data.map(d => {return d.name}))
-    .range([0, dim.height]) //Depending on the starting value the data gets sorted U -> D or D-> U
+    .range([0, (dim.height - 50)]) //Depending on the starting value the data gets sorted U -> D or D-> U && 50 to center the label with bar
 
   // Add Y axis to the right
   SVG.append('g')
@@ -50,7 +50,7 @@ const createAxis = (data) => {
   return {X_AXIS, Y_AXIS};
 }
 
-const populate = async () => {
+const render = async () => {
   const {X_AXIS, Y_AXIS} = createAxis(await dataset) 
 
   // console.log(await dataset)
@@ -78,4 +78,4 @@ const populate = async () => {
     .select('title').text(d => {return d.rating})
   }
 
-populate()
+render()
