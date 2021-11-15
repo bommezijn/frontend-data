@@ -10,8 +10,8 @@ const dataset = getData(API).then(whole =>
   whole.map(specified => {
     const CELEB = {
       name: specified.name,
-      mug: specified.profile_path,
-      rating: Math.round(specified.popularity)
+      rating: Math.round(specified.popularity),
+      mug: `https://image.tmdb.org/t/p/w500/${specified.profile_path}`
     }
     return CELEB
   })
@@ -40,7 +40,7 @@ const createAxis = (data) => {
   /* Create Y axis based on the value from name */
   const Y_AXIS = d3.scaleBand() //shouldn't be ordinal but scaleband, not sure why but it works.
     .domain(data.map(d => {return d.name}))
-    .range([0, (dim.height - 50)]) //Depending on the starting value the data gets sorted U -> D or D-> U && 50 to center the label with bar
+    .range([0, dim.height]) //Depending on the starting value the data gets sorted U -> D or D-> U && 50 to center the label with bar
 
   // Add Y axis to the right
   SVG.append('g')
@@ -70,12 +70,18 @@ const render = async () => {
   const cscale = d3.scaleOrdinal().domain(d3.extent(await dataset, d=> d.rating)).range(['green', 'red']);
 
   rectangles
-    .attr('height', 20) //a predefined value for the height of a single data bar
+    // .attr('height', 20) //a predefined value for the height of a single data bar
+    .attr('height', Y_AXIS.bandwidth()) //a predefined value for the height of a single data bar
     .attr('width', (d) => {return d.rating * 7})
     .attr('x', 0)
-    .attr('y', (d,i) => {return i * (20 + 5)}) //The 5 is the padding between. Should be done differently
+    .attr('y', (d,i) => {return i * Y_AXIS.bandwidth()}) //The 5 is the padding between. Should be done differently
     .attr('fill', (d) => cscale(d))
     .select('title').text(d => {return d.rating})
   }
 
 render()
+
+// note to future self, I added Y_AXIS.bandwith() to line 74 and 77. This made all the bars fill the height of the entire group and making it equal to the axisLeft.
+// Currently there is this issue with the width of the graph, it does not correlate to the bars or the axis. This has to be fixed.
+// Another thing that has to be fixed is the positioning of the graph itself and the axis 
+// Besides that it needs interactivity, thus I have to find something within the dataset to compare or filter to. an Idea would be to get the best movies or somethign
