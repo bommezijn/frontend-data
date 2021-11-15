@@ -1,30 +1,10 @@
-console.log('hello JS')
-
 const dimensions = {
+  barHeight: 20,
   margin: {t: 40, b: 10, l: 120, r:20},
-  get width(){return 800 - this.margin.l - this.margin.r},
-  get height(){return 700 - this.margin.b - this.margin.t},
-  barHeight: 20
+  get height(){return 600 - this.margin.b - this.margin.t},
+  get width(){return window.innerWidth - this.margin.r},
+  // get width(){return 800 - this.margin.l - this.margin.r},
 }
-
-/* Async / then function that retrieves data and creates consumable objects, returns promise */
-// async function getData() {
-//   const data = await d3.json('https://api.themoviedb.org/3/person/popular?api_key=63b8e2e812b6172f220bb5bb9aab2dea')
-//     .then(
-//       data => {
-//         console.log(data.results)
-//         return data.results.map(x => {
-//         const actor = {
-//           name: x.name,
-//           mugshot: x.profile_path,
-//           rating: x.popularity
-//         }
-//         return actor
-//       })
-//     })
-
-//     return data
-//   }
 
 // Pure Async data retrieval function with proper error handling
 const retrieveData = async () => {
@@ -46,7 +26,9 @@ const createSVG = () => {
   const SVG = d3.select('body').append('svg')
     .attr('width', dimensions.width)
     .attr('height', dimensions.height)
+    // .attr('viewBox', `0 0 ${dimensions.width} ${dimensions.height}`)
     .style('border', '1px solid black')
+    .style('padding', `10px 10px`)
   return SVG
 }
 
