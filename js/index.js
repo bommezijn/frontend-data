@@ -68,7 +68,10 @@ const scale = d3.scaleLinear().domain([0,10]).range([0,dimensions.width - dimens
 // Create axis
 const xAxis = d3.axisBottom().scale(scale)
 
-
+/* 
+  BEGIN example
+  https://bl.ocks.org/d3noob/c506ac45617cf9ed39337f99f8511218
+*/
 var x = d3.scaleLinear().range([0, dimensions.width]);
 var y = d3.scaleLinear().range([dimensions.height, 0]);
 // gridlines in x axis function
@@ -76,13 +79,14 @@ function make_x_gridlines() {
   return d3.axisBottom(x)
       .ticks(10)
 }
-
 // gridlines in y axis function
 function make_y_gridlines() {		
   return d3.axisLeft(y)
       .ticks(10)
 }
-
+/* 
+END example
+*/
 
 // Create graph function, requires SVG, group and async data 
 const createGraph = async () => {
@@ -90,6 +94,10 @@ const createGraph = async () => {
 
   GROUP.append('g').classed('x.axis', true).attr("transform", `translate(0, ${dimensions.height - dimensions.margin.t})`).call(xAxis) //Plot scale with height - 20 // x axis
 
+/* 
+  BEGIN example
+  https://bl.ocks.org/d3noob/c506ac45617cf9ed39337f99f8511218
+*/
   GROUP.append("g")			
   .attr("class", "grid")
   .attr("transform", `translate(0,${dimensions.height})`)
@@ -103,6 +111,9 @@ const createGraph = async () => {
       .tickSize(-dimensions.width)
       .tickFormat("")
   )
+  /* 
+    END example 
+  */
 // Create future reference for the bar chart within a group, enter data and join it.
   const RECTANGLE =
     GROUP.selectAll('rect')
