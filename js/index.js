@@ -33,23 +33,23 @@ const createAxis = (data) => {
     .range([0, dim.width]);
 
   SVG.append('g')
-    .attr('transform', `translate(0, ${dim.height - dim.margin.t})`)
-    .call(d3.axisBottom(X_AXIS))
-
+  .attr('transform', `translate(0,  ${dim.height - dim.margin.t})`) //push scale down
+  .call(d3.axisBottom(X_AXIS))
+  
   /* Create Y axis based on the value from name */
 
   const Y_AXIS = d3.scaleOrdinal()
-    .domain(data.map(d => {return d.name}))
-    .range([0, dim.height])
+    .domain(data, data.map(d => {return d.name}))
+    .range([dim.height, 0])
 
   SVG.append('g')
-    .call(d3.axisLeft(Y_AXIS))
+    .call(d3.axisRight(Y_AXIS))
 
   return {X_AXIS, Y_AXIS};
 }
 
 const populate = async () => {
-  const {X_AXIS} = createAxis(await dataset) 
+  const {X_AXIS, Y_AXIS} = createAxis(await dataset) 
 
   // console.log(await dataset)
   const rectangles =  createGroup(SVG)
@@ -74,6 +74,6 @@ const populate = async () => {
     .attr('y', (d,i) => {return i * (20 + 5)})
     .attr('fill', (d) => cscale(d))
     .select('title').text(d => {return d.rating})
-}
+  }
 
 populate()

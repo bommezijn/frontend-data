@@ -1,7 +1,7 @@
 export const dim = {
   margin: {t: 40, b: 10, l: 120, r:20},
   get height(){return 600 - this.margin.b - this.margin.t},
-  get width(){return 800 - this.margin.r - this.margin.l},
+  get width(){return 900 - this.margin.r - this.margin.l},
   // get width(){return window.innerWidth}
 }
 
