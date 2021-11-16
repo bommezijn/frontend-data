@@ -86,3 +86,4 @@ render()
 // Currently there is this issue with the width of the graph, it does not correlate to the bars or the axis. This has to be fixed.
 // Another thing that has to be fixed is the positioning of the graph itself and the axis 
 // Besides that it needs interactivity, thus I have to find something within the dataset to compare or filter to. an Idea would be to get the best movies or somethign
+
