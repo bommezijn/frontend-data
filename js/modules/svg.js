@@ -1,7 +1,7 @@
 export const dim = {
   margin: {t: 40, b: 10, l: 120, r:20},
-  get height(){return 800 - this.margin.b - this.margin.t},
-  get width(){return 1000 - this.margin.r - this.margin.l},
+  get height(){return 600 - this.margin.b - this.margin.t},
+  get width(){return 800 - this.margin.r - this.margin.l},
   // get width(){return window.innerWidth}
 }
 
@@ -16,5 +16,6 @@ export const createSVG = (width = dim.width, height = dim.height ) => {
     .attr('width', width)
     .attr('height', height)
     .attr('viewBox', `0 0 ${width} ${height}`)
+    .attr('transform', `translate(${dim.margin.l}, ${dim.margin.t})`)
     .style('border', '1px solid black')
 }
