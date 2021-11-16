@@ -5,10 +5,16 @@ export const dim = {
   // get width(){return window.innerWidth}
 }
 
-export const createSVG = () => {
+/**
+ * 
+ * @param {Number} width A numerical value for the size of the SVG, defaults to dim.width
+ * @param {Number} height A numericala value for the size of the SVG, defaults to dim.height
+ * @returns SVG within the body element
+ */
+export const createSVG = (width = dim.width, height = dim.height ) => {
   return d3.select('body').append('svg')
-    .attr('width', dim.width)
-    .attr('height', dim.height)
-    .attr('viewBox', `0 0 ${dim.width} ${dim.height}`)
+    .attr('width', width)
+    .attr('height', height)
+    .attr('viewBox', `0 0 ${width} ${height}`)
     .style('border', '1px solid black')
 }

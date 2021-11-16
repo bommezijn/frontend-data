@@ -2,7 +2,8 @@ console.log(`%cHello World`, `color: #ffcc00; font-weight: bold;`)
 import getData from './modules/data.js';
 import {dim, createSVG} from './modules/svg.js'
 
-const SVG = createSVG()
+const WIDTH = 600, HEIGHT = 800;
+const SVG = createSVG(WIDTH, HEIGHT)
 
 const API = 'https://api.themoviedb.org/3/person/popular?api_key=63b8e2e812b6172f220bb5bb9aab2dea'
 
@@ -30,29 +31,29 @@ const createAxis = (data) => {
   /* Create X axis based on the value from rating */
   const X_AXIS = d3.scaleLinear()
     .domain(d3.extent(data, d => d.rating))
-    .range([0, dim.width]);
+    .range([0, WIDTH]);
 
   // Add X axis to the bottom axis
   SVG.append('g')
-  .attr('transform', `translate(0,  ${dim.height - dim.margin.t})`) //push scale down
+  .attr('transform', `translate(0,  ${HEIGHT - dim.margin.t})`) //push scale down
   .call(d3.axisBottom(X_AXIS))
   
   /* Create Y axis based on the value from name */
   const Y_AXIS = d3.scaleBand() //shouldn't be ordinal but scaleband, not sure why but it works.
     .domain(data.map(d => {return d.name}))
-    .range([0, dim.height]) //Depending on the starting value the data gets sorted U -> D or D-> U && 50 to center the label with bar
+    .range([0, HEIGHT]) //Depending on the starting value the data gets sorted U -> D or D-> U && 50 to center the label with bar
 
   // Add Y axis to the right
   SVG.append('g')
     .call(d3.axisLeft(Y_AXIS))
-    .attr('transform', `translate(${dim.width - dim.margin.r})`)
+    .attr('transform', `translate(${WIDTH - dim.margin.r})`)
 
   return {X_AXIS, Y_AXIS};
 }
 
 const render = async () => {
   const {X_AXIS, Y_AXIS} = createAxis(await dataset) 
-
+  SVG.attr('transform', `translate(20, 20)`) //Padding to remove the SVG from the corner of the screen
   // console.log(await dataset)
   const rectangles =  createGroup(SVG)
     .selectAll('rect')
@@ -71,8 +72,8 @@ const render = async () => {
 
   rectangles
     // .attr('height', 20) //a predefined value for the height of a single data bar
-    .attr('height', Y_AXIS.bandwidth()) //a predefined value for the height of a single data bar
-    .attr('width', (d) => {return d.rating * 7})
+    .attr('height', (HEIGHT / Y_AXIS.bandwidth())) //a predefined value for the height of a single data bar
+    .attr('width', (d) => {return WIDTH * (`0.${d.rating}`)})
     .attr('x', 0)
     .attr('y', (d,i) => {return i * Y_AXIS.bandwidth()}) //The 5 is the padding between. Should be done differently
     .attr('fill', (d) => cscale(d))
