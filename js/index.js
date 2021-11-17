@@ -88,8 +88,6 @@ const sanitizeData = async (data) => {
   }
 }
 
-console.log(await sanitizeData(await dataset(API)))
-
 async function render(data) {
   const {X, Y} = createAxis(data)
 
