@@ -29,29 +29,26 @@ const SVG = d3.select('body').append('div').attr('id', 'graph').append('svg')
    * @returns Methods X and Y
  */
 const createAxis = (data) => {
-  const X = d3.scaleBand() //scale for 
-    .domain(data.map(d => d.name))
-    .range([0, dimensions.width])
+  const X = d3.scaleBand() //scale for ordinal or categorical dimensions.
+    .domain(data.map(d => d.name)) //Data it needs to map to the ranges
+    .range([0, dimensions.width]) //Plots domain elements to a 'physical' location on the graph
     .paddingInner(0.2)
 
   const Y = d3.scaleLinear()
-    .domain([0, d3.max(data, d=> {return d.rating})])
+    .domain([0, d3.max(data, d=> {return d.rating})]) //Create a horizontal scale from 0 to the max value of the dataset. Use max instead of extent for the sake of 0 start value
     .range([dimensions.height, 0]);
-  // .domain(d3.extent(data, d => d.rating))
-    // .domain([0, d3.max(data, d=> {return d.rating})]) 
-    // [0, d3.max(d3.extent(data, d => d.rating))]
 
   SVG.append('g')
     .attr('transform', `translate(0, ${dimensions.height})`)
-    .call(d3.axisBottom(X))
+    .call(d3.axisBottom(X)) //Plot X axis (scaleBand) to the bottom
     .attr('fill', '#ffffff20')
     .selectAll('text')
-      .attr('transform', `translate(-10,0) rotate(-45)`)
+      .attr('transform', `translate(-10,0) rotate(-45)`) //Rotate text for easier reading.
       .attr('fill', 'white')
       .style('text-anchor', 'end')
   
   SVG.append('g')
-    .call(d3.axisLeft(Y))
+    .call(d3.axisLeft(Y)) //Plot Y axis (scaleLinear) to the left
     .attr('fill', '#ffffff20')
       .selectAll('text')
       .attr('fill', 'white')
