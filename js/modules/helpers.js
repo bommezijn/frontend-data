@@ -8,6 +8,12 @@ export const roundNumber = (Number) => {
   return typeof(Number) === 'number' ? Math.round(Number) : console.error('cannot convert non numerical value')
 }
 
+/**
+ * @description create a url path for images with the themoviedb img link and slug from dataset.
+ * @param {URL} IMAGE_URL URL of the themoviedb img link
+ * @param {String} slug slug of the image location
+ * @returns Viable link that redirects to an image.
+ */
 export const createPath = (IMAGE_URL, slug) => {
   return `${IMAGE_URL}${slug}`
 }
