@@ -23,21 +23,27 @@ const createAxis = (data) => {
     .padding(0.2)
 
   const Y = d3.scaleLinear()
+    // .domain(d3.extent(data, d => d.rating))
+    .domain([0, d3.max(data, d=> {return d.rating})])
     // .domain([0, d3.max(data, d=> {return d.rating})]) 
     // [0, d3.max(d3.extent(data, d => d.rating))]
-    .domain(d3.extent(data, d => d.rating))
 
     .range([dimensions.height, 0]);
 
   SVG.append('g')
     .attr('transform', `translate(0, ${dimensions.height})`)
     .call(d3.axisBottom(X))
+    .attr('fill', '#ffffff20')
     .selectAll('text')
       .attr('transform', `translate(-10,0) rotate(-45)`)
+      .attr('fill', 'white')
       .style('text-anchor', 'end')
   
   SVG.append('g')
     .call(d3.axisLeft(Y))
+    .attr('fill', '#ffffff20')
+      .selectAll('text')
+      .attr('fill', 'white')
 
   return { X, Y};
 }
