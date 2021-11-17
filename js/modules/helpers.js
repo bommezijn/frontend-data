@@ -18,6 +18,11 @@ export const createPath = (IMAGE_URL, slug) => {
   return `${IMAGE_URL}${slug}`
 }
 
+/**
+ * @description themoviedb specific helper function, stringifies the gender type from num. value to string
+ * @param {Number} Number a value of 1 or 2
+ * @returns String with the gender
+ */
 export const numberToGender = (Number) => {
   return Number === 1 ? 'Female' : 'Male'
 }
