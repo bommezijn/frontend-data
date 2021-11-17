@@ -123,7 +123,8 @@ async function render(data) {
     .attr('fill', 'white')
     .attr('text-anchor', 'middle')
       .transition()
-      .delay((d,i) => {return i*150})
+      .ease(d3.easeQuadIn)
+      .delay((d,i) => {return i*100})
       .attr('opacity', 1)
 
 }
