@@ -1,0 +1,16 @@
+* {
+  font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  background-color: #110523;
+}
+
+.bar {
+  fill: #B61544;
+  opacity: 0.75;
+}
+
+.bar:hover {
+  opacity: 1;
+}
