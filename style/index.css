@@ -8,4 +8,9 @@ body {
 
 .bar {
   fill: #B61544;
+  opacity: 0.75;
+}
+
+.bar:hover {
+  opacity: 1;
 }
