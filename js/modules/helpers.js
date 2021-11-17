@@ -1,4 +1,9 @@
 
+/**
+ * @description Check if the parameter is type of Number and round it up.
+ * @param {Number} Number a numerical value that needst to be rounded up.
+ * @returns A number
+ */
 export const roundNumber = (Number) => {
   return typeof(Number) === 'number' ? Math.round(Number) : console.error('cannot convert non numerical value')
 }
