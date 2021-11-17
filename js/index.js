@@ -1,6 +1,6 @@
 console.log(`%cHello JS`, `color: #ffcc00; font-weight: bold;`)
+import {sanitizeData, dataset} from './modules/data.js'
 const API = 'https://api.themoviedb.org/3/person/popular?api_key=63b8e2e812b6172f220bb5bb9aab2dea'
-const IMAGE_URL = 'https://image.tmdb.org/t/p/w500/';
 
 const dimensions = {
   margin: {t:20, r: 20, b: 30, l: 40},
@@ -46,46 +46,6 @@ const createAxis = (data) => {
       .attr('fill', 'white')
 
   return { X, Y};
-}
-
-const dataset = async (url) => {
-  try {
-    const data = d3.json(url)
-    return await data
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-const roundNumber = (Number) => {
-  return typeof(Number) === 'number' ? Math.round(Number) : console.error('cannot convert non numerical value')
-}
-
-const createPath = (IMAGE_URL, slug) => {
-  return `${IMAGE_URL}${slug}`
-}
-
-const numberToGender = (Number) => {
-  return Number === 1 ? 'Female' : 'Male'
-}
-
-const sanitizeData = async (data) => {
-  const dirtyData = await data.results;
-  try {
-    return dirtyData.map(
-      selection => {
-        const ACTOR = {
-          name: selection.name,
-          rating: roundNumber(selection.popularity),
-          gender: numberToGender(selection.gender),
-          photo: createPath(IMAGE_URL, selection.profile_path)
-        }
-        return ACTOR
-      }
-    )
-  } catch (error) {
-    console.error(error)
-  }
 }
 
 async function render(data) {
