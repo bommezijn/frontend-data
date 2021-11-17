@@ -5,12 +5,12 @@ const IMAGE_URL = 'https://image.tmdb.org/t/p/w500/';
 const dimensions = {
   margin: {t:20, r: 20, b: 30, l: 40},
   get width() {return 960 - this.margin.l - this.margin.r},
-  get height() {return 500 - this.margin.t - this.margin.b}
+  get height() {return 600 - this.margin.t - this.margin.b}
 }
 
 const SVG = d3.select('body').append('div').attr('id', 'graph').append('svg')
   .attr('width', dimensions.width + dimensions.margin.l + dimensions.margin.r)
-  .attr('height', dimensions.height + dimensions.margin.t + dimensions.margin.b)
+  .attr('height', dimensions.height + dimensions.margin.t + dimensions.margin.b + 50)
   .style('border', '1px solid black')
   .append('g')
     .attr('transform', `translate(${dimensions.margin.l}, ${dimensions.margin.t})`)
@@ -33,8 +33,8 @@ const createAxis = (data) => {
     .attr('transform', `translate(0, ${dimensions.height})`)
     .call(d3.axisBottom(X))
     .selectAll('text')
-    .attr('transform', `translate(-10,0) rotate(-45)`)
-    .style('text-anchor', 'end')
+      .attr('transform', `translate(-10,0) rotate(-45)`)
+      .style('text-anchor', 'end')
   
   SVG.append('g')
     .call(d3.axisLeft(Y))
@@ -95,12 +95,13 @@ async function render(data) {
       return r
     })
     .attr('class', 'bar') //Why give it a class?
+    .attr('x', (d) => {return X(d.name)})
+    .attr('width', X.bandwidth())
     .transition()
-      .delay(200)
+    .attr('y', (d) => {return Y(d.rating)})
+    .transition()
       .ease(d3.easeLinear)
-      .attr('x', (d) => {return X(d.name)})
-      .attr('width', X.bandwidth())
-      .attr('y', (d) => {return Y(d.rating)})
+      .delay((d,i) => {return i*80})
       .attr('height', (d) => {return dimensions.height - Y(d.rating)})  
       .select('title').text(d => {return `${d.name}: ${d.rating}`})
 
@@ -111,9 +112,13 @@ async function render(data) {
     .text((d) => {return d.rating})
     .attr('x', (d) => {return X(d.name) + X.bandwidth() / 2})
     .attr('y', (d) => {return Y(d.rating) + 14})
+    .attr('opacity', 0)
     .attr('font-size', '11px')
     .attr('fill', 'white')
     .attr('text-anchor', 'middle')
+      .transition()
+      .delay((d,i) => {return i*150})
+      .attr('opacity', 1)
 
 }
 
