@@ -32,7 +32,7 @@ const createAxis = (data) => {
   const X = d3.scaleBand() //scale for 
     .domain(data.map(d => d.name))
     .range([0, dimensions.width])
-    .padding(0.2)
+    .paddingInner(0.2)
 
   const Y = d3.scaleLinear()
     .domain([0, d3.max(data, d=> {return d.rating})])
