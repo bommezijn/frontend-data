@@ -11,18 +11,22 @@ const dimensions = {
 const SVG = d3.select('body').append('div').attr('id', 'graph').append('svg')
   .attr('width', dimensions.width + dimensions.margin.l + dimensions.margin.r)
   .attr('height', dimensions.height + dimensions.margin.t + dimensions.margin.b)
+  .style('border', '1px solid black')
   .append('g')
     .attr('transform', `translate(${dimensions.margin.l}, ${dimensions.margin.t})`)
 
 
 const createAxis = (data) => {
   const X = d3.scaleBand()
-    .domain(data.map(d => d.family))
+    .domain(data.map(d => d.name))
     .range([0, dimensions.width])
+    .padding(0.2)
 
   const Y = d3.scaleLinear()
     // .domain([0, d3.max(data, d=> {return d.rating})]) 
+    // [0, d3.max(d3.extent(data, d => d.rating))]
     .domain(d3.extent(data, d => d.rating))
+
     .range([dimensions.height, 0]);
 
   SVG.append('g')
@@ -83,15 +87,34 @@ console.log(await sanitizeData(await dataset(API)))
 async function render(data) {
   const {X, Y} = createAxis(data)
 
-  SVG.selectAll('.bar')
+  SVG.selectAll('rect')
     .data(data)
-    .enter().append('rect')
-    .attr('class', 'bar')
-    .attr('x', (d) => {return X(d.name)})
-    .attr('width', X.bandwidth())
-    .attr('y', (d) => {return Y(d.rating)})
-    .attr('height', (d) => {return dimensions.height - Y(d.rating)})  
-    .style('border', `1px solid black`)
+    .join((enter) => {
+      const r = enter.append('rect')
+      r.append('title')
+      return r
+    })
+    .attr('class', 'bar') //Why give it a class?
+    .transition()
+      .delay(200)
+      .ease(d3.easeLinear)
+      .attr('x', (d) => {return X(d.name)})
+      .attr('width', X.bandwidth())
+      .attr('y', (d) => {return Y(d.rating)})
+      .attr('height', (d) => {return dimensions.height - Y(d.rating)})  
+      .select('title').text(d => {return `${d.name}: ${d.rating}`})
+
+  SVG.selectAll('p')
+    .data(data)
+    .enter()
+    .append('text')
+    .text((d) => {return d.rating})
+    .attr('x', (d) => {return X(d.name) + X.bandwidth() / 2})
+    .attr('y', (d) => {return Y(d.rating) + 14})
+    .attr('font-size', '11px')
+    .attr('fill', 'white')
+    .attr('text-anchor', 'middle')
+
 }
 
 render(await sanitizeData(await dataset(API)))
