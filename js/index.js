@@ -56,6 +56,10 @@ const createAxis = (data) => {
   return { X, Y};
 }
 
+/**
+ * @description Render graph with bars and scales
+ * @param {JSON} data data from an API endpoint, specifically data sanitized by sanitizeData()
+ */
 async function render(data) {
   const {X, Y} = createAxis(data)
 
