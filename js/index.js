@@ -22,19 +22,24 @@ const SVG = d3.select('body').append('div').attr('id', 'graph').append('svg')
   .append('g')
     .attr('transform', `translate(${dimensions.margin.l}, ${dimensions.margin.t})`)
 
+/**
+   * @description Creates Axis and scales for the graph. Specifically a scaleBand and scaleLinear
+   * @see {@link https://github.com/suwigyarathore/chart-examples/blob/555e608e78bedeac0fe4dcc541819236c08cdc02/scatter-line/main.js#L30} for reference of the codestyle from suwigyarathore.
+   * @param {JSON} data dataset that the graph uses to generate the scaleBand and scaleLinear
+   * @returns Methods X and Y
+ */
 const createAxis = (data) => {
-  const X = d3.scaleBand()
+  const X = d3.scaleBand() //scale for 
     .domain(data.map(d => d.name))
     .range([0, dimensions.width])
     .padding(0.2)
 
   const Y = d3.scaleLinear()
-    // .domain(d3.extent(data, d => d.rating))
     .domain([0, d3.max(data, d=> {return d.rating})])
+    .range([dimensions.height, 0]);
+  // .domain(d3.extent(data, d => d.rating))
     // .domain([0, d3.max(data, d=> {return d.rating})]) 
     // [0, d3.max(d3.extent(data, d => d.rating))]
-
-    .range([dimensions.height, 0]);
 
   SVG.append('g')
     .attr('transform', `translate(0, ${dimensions.height})`)
