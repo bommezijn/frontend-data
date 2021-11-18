@@ -161,17 +161,28 @@ async function render(data) {
 
 
 const pages = {
-  first: await sanitizeData(await dataset(API)),
-  second: await sanitizeData(await dataset(`${API}&page=2`))
+  0: await sanitizeData(await dataset(`${API}&page=1`)),
+  1: await sanitizeData(await dataset(`${API}&page=2`)),
+  2: await sanitizeData(await dataset(`${API}&page=3`)),
+  3: await sanitizeData(await dataset(`${API}&page=4`)),
+  4: await sanitizeData(await dataset(`${API}&page=5`)),
+  5: await sanitizeData(await dataset(`${API}&page=6`)),
+  6: await sanitizeData(await dataset(`${API}&page=7`)),
+  7: await sanitizeData(await dataset(`${API}&page=8`))
 }
 
-const updateRender = (endPoint = pages.first) => {
+const updateRender = (endPoint = pages[0]) => {
   console.log(`current`, endPoint)
   render(endPoint)
 }
 
 updateRender()
+let i = 0;
 
 const button = d3.select('body').append('button').attr('class', 'tititi')
   .text('Next set of actors')
-  button.on('click', () => {updateRender(pages.second)})
+  button.on('click', () => {
+    i++
+    updateRender(pages[i])
+    console.log(i)
+  })
