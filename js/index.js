@@ -9,6 +9,11 @@ const dimensions = {
   get height() {return 600 - this.margin.t - this.margin.b}
 }
 
+const pages = {
+  first: await sanitizeData(await dataset(API)),
+  second: await sanitizeData(await dataset(`${API}&page=2`))
+}
+
 /* 
   SVG variable is a d3.select chain which creates a div for the graph with an SVG in it and gives the following attributes
   * Width, calculation of width + margin left + margin right
@@ -56,6 +61,29 @@ const createAxis = (data) => {
   return { X, Y};
 }
 
+
+// console.log(await dataset(`${API}&page=2`))
+// const setControls = () => {
+//   const buttons = d3.select('body').append('div').attr('class', 'controls');
+//   buttons.append('input')
+//     .attr('type', 'button')
+//     .attr('value','page 1')
+//       .on('click', render(pages.first))
+
+//     buttons.append('input')
+//       .attr('type', 'button')
+//       .attr('value','page 2')
+//         .on('click', render(pages.second))
+
+// }
+// setControls()
+
+// const updateData = () => {
+//   const newDataset = await sanitizeData(await dataset(`${API}&page=2`))
+
+// }
+
+
 /**
  * @description Render graph with bars and scales
  * @param {JSON} data data from an API endpoint, specifically data sanitized by sanitizeData()
@@ -67,8 +95,11 @@ async function render(data) {
     .data(data)
     .join((enter) => {
       const r = enter.append('rect')
-      r.append('title')
+        r.append('title')
       return r
+    },
+    (update) => {
+      return update
     })
     .attr('class', 'bar') //Why give it a class?
     .attr('x', (d) => {return X(d.name)})
@@ -99,4 +130,4 @@ async function render(data) {
 
 }
 
-render(await sanitizeData(await dataset(API)))
+render(pages.first)
