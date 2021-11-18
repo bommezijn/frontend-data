@@ -99,12 +99,12 @@ async function render(data) {
       (enter) => {
         const r = enter.append('rect')
         r
-        .style('opacity',1)
+        .style('opacity',0.75)
         .append('title')
         return r
     },
     (update) => {
-      return update.style('fill', '#AB7E6D').transition()
+      return update.transition().style('fill','#DC5A41')
     },
     (exit) => {return exit.remove()})
 
@@ -117,6 +117,7 @@ async function render(data) {
         .attr('width', xscale.bandwidth())
         .attr('y', (d) => {return yscale(d.rating)})
         .transition()
+          .style('fill', '#B61544')
           .attr('height', (d) => {return dimensions.height - yscale(d.rating)})  
           .select('title').text(d => {return `${d.name}: ${d.rating}`});
 
@@ -183,8 +184,7 @@ const updateRender = (endPoint = pages[0]) => {
 updateRender()
 let i = 0;
 
-const button = d3.select('body').append('button').attr('class', 'tititi')
-  .text('Next set of actors')
+const button = d3.select('.next')
   button.on('click', () => {
     i++
     updateRender(pages[i])

@@ -8,15 +8,33 @@ body {
 }
 
 .axis > * {
-  color: #8C7F98;
+  color: #8C7F9850;
   font-size: 12px;
 }  
 
 .bar {
-  fill: #B61544;
-  opacity: 0.75;
+  fill: #DC5A41;
 }
 
 .bar:hover {
   opacity: 1;
+}
+
+.next{
+  padding: 1em;
+  border: 1px solid #29263A;
+  border-radius: 0.5em;
+  background-color: #15112E;
+  color: white;
+  transition: color 500ms ease-in;
+}
+
+.next:hover {
+  background-color: #231F4B;
+  color: #edc4d0;
+}
+
+.next:active {
+  color: #ce6382;
+  box-shadow: inset 0 0 10px rgba(132, 132, 132, 0.25);
 }
