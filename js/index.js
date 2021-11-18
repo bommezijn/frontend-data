@@ -160,6 +160,11 @@ async function render(data) {
 }
 
 
+
+/* 
+  Ultra ugly way of iterating through the data. With a hard stop.
+  Should update it to something that is dynamic.
+*/
 const pages = {
   0: await sanitizeData(await dataset(`${API}&page=1`)),
   1: await sanitizeData(await dataset(`${API}&page=2`)),
