@@ -177,7 +177,6 @@ const pages = {
 }
 
 const updateRender = (endPoint = pages[0]) => {
-  console.log(`current`, endPoint)
   render(endPoint)
 }
 
@@ -189,5 +188,4 @@ const button = d3.select('body').append('button').attr('class', 'tititi')
   button.on('click', () => {
     i++
     updateRender(pages[i])
-    console.log(i)
   })
