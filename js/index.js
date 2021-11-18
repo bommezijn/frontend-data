@@ -9,10 +9,6 @@ const dimensions = {
   get height() {return 600 - this.margin.t - this.margin.b}
 }
 
-const pages = {
-  first: await sanitizeData(await dataset(API)),
-  second: await sanitizeData(await dataset(`${API}&page=2`))
-}
 
 /* 
   SVG variable is a d3.select chain which creates a div for the graph with an SVG in it and gives the following attributes
@@ -130,4 +126,14 @@ async function render(data) {
 
 }
 
+const pages = {
+  first: await sanitizeData(await dataset(API)),
+  second: await sanitizeData(await dataset(`${API}&page=2`))
+}
+
 render(pages.first)
+
+const button = d3.select('body').append('button').attr('class', 'tititi')
+  .text('hehehe')
+// const but = d3.select('body').select('button')
+button.on('click', () => {render(pages.second)})
