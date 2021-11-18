@@ -35,11 +35,7 @@ const createAxis = (data) => {
     .range([0, dimensions.width]) //Plots domain elements to a 'physical' location on the graph
     .paddingInner(0.2)
 
-  const Y = d3.scaleLinear()
-    .domain([0, d3.max(data, d=> {return d.rating})]) //Create a horizontal scale from 0 to the max value of the dataset. Use max instead of extent for the sake of 0 start value
-    .range([dimensions.height, 0]);
-
-  SVG.append('g')
+    SVG.append('g')
     .attr('transform', `translate(0, ${dimensions.height})`)
     .call(d3.axisBottom(X)) //Plot X axis (scaleBand) to the bottom
     .attr('fill', '#ffffff20')
@@ -47,12 +43,18 @@ const createAxis = (data) => {
       .attr('transform', `translate(-10,0) rotate(-45)`) //Rotate text for easier reading.
       .attr('fill', 'white')
       .style('text-anchor', 'end')
-  
-  SVG.append('g')
+
+  const Y = d3.scaleLinear()
+    .domain([0, d3.max(data, d=> {return d.rating})]) //Create a horizontal scale from 0 to the max value of the dataset. Use max instead of extent for the sake of 0 start value
+    .range([dimensions.height, 0]);
+
+    
+    SVG.append('g')
     .call(d3.axisLeft(Y)) //Plot Y axis (scaleLinear) to the left
     .attr('fill', '#ffffff20')
       .selectAll('text')
       .attr('fill', 'white')
+    
 
   return { X, Y};
 }
@@ -85,18 +87,24 @@ const createAxis = (data) => {
  * @param {JSON} data data from an API endpoint, specifically data sanitized by sanitizeData()
  */
 async function render(data) {
+  const svg = d3.select('svg')
   const {X, Y} = createAxis(data)
 
-  SVG.selectAll('rect')
+  SVG
+    .selectAll('rect')
     .data(data)
-    .join((enter) => {
-      const r = enter.append('rect')
-        r.append('title')
-      return r
+    .join(
+      (enter) => {
+        const r = enter.append('rect')
+        r
+        .style('opacity',0.5)
+        .append('title')
+        return r
     },
     (update) => {
-      return update
-    })
+      return update.style('opacity',1)
+    },
+    (exit) => {return exit.remove()})
     .attr('class', 'bar') //Why give it a class?
     .attr('x', (d) => {return X(d.name)})
     .attr('width', X.bandwidth())
@@ -108,10 +116,26 @@ async function render(data) {
       .attr('height', (d) => {return dimensions.height - Y(d.rating)})  
       .select('title').text(d => {return `${d.name}: ${d.rating}`})
 
-  SVG.selectAll('p')
+  SVG
+    .selectAll('p')
     .data(data)
-    .enter()
-    .append('text')
+    .join(
+      (enter) => {
+        const t = enter.append('text');
+         t
+          .transition()
+          .ease(d3.easeLinear)
+          .delay((d,i) => {return i*50})
+        return t
+      },
+      (update) => {
+        return update.style('opacity', 0.5)
+      },
+      (exit) => {
+        return exit.remove()
+      }
+    )
+    // .append('text')
     .text((d) => {return d.rating})
     .attr('x', (d) => {return X(d.name) + X.bandwidth() / 2})
     .attr('y', (d) => {return Y(d.rating) + 14})
@@ -123,7 +147,6 @@ async function render(data) {
       .ease(d3.easeQuadIn)
       .delay((d,i) => {return i*100})
       .attr('opacity', 1)
-
 }
 
 const pages = {
@@ -131,9 +154,15 @@ const pages = {
   second: await sanitizeData(await dataset(`${API}&page=2`))
 }
 
-render(pages.first)
+const updateRender = (endPoint = pages.first) => {
+  console.log(`current`, endPoint)
+  render(endPoint)
+}
+
+updateRender()
 
 const button = d3.select('body').append('button').attr('class', 'tititi')
-  .text('hehehe')
-// const but = d3.select('body').select('button')
-button.on('click', () => {render(pages.second)})
+  .text('Next set of actors')
+  button.on('click', () => {updateRender(pages.second)})
+
+  voor jou is pages = allhouses of allgenders
