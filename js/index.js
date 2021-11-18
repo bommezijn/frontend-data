@@ -21,6 +21,7 @@ const SVG = d3.select('body').append('div').attr('id', 'graph').append('svg')
   .attr('height', dimensions.height + dimensions.margin.t + dimensions.margin.b + 50)
   // .style('border', '1px solid black')
   .append('g')
+    .attr('class', 'barChart')
     .attr('transform', `translate(${dimensions.margin.l}, ${dimensions.margin.t})`)
 
 /**
@@ -36,6 +37,7 @@ const createAxis = (data) => {
     .paddingInner(0.2)
 
     SVG.append('g')
+    .attr('class', 'xAxis')
     .attr('transform', `translate(0, ${dimensions.height})`)
     .call(d3.axisBottom(X)) //Plot X axis (scaleBand) to the bottom
     .attr('fill', '#ffffff20')
@@ -50,6 +52,7 @@ const createAxis = (data) => {
 
     
     SVG.append('g')
+    .attr('class', 'yAxis')
     .call(d3.axisLeft(Y)) //Plot Y axis (scaleLinear) to the left
     .attr('fill', '#ffffff20')
       .selectAll('text')
@@ -58,29 +61,6 @@ const createAxis = (data) => {
 
   return { X, Y};
 }
-
-
-// console.log(await dataset(`${API}&page=2`))
-// const setControls = () => {
-//   const buttons = d3.select('body').append('div').attr('class', 'controls');
-//   buttons.append('input')
-//     .attr('type', 'button')
-//     .attr('value','page 1')
-//       .on('click', render(pages.first))
-
-//     buttons.append('input')
-//       .attr('type', 'button')
-//       .attr('value','page 2')
-//         .on('click', render(pages.second))
-
-// }
-// setControls()
-
-// const updateData = () => {
-//   const newDataset = await sanitizeData(await dataset(`${API}&page=2`))
-
-// }
-
 
 /**
  * @description Render graph with bars and scales
@@ -164,5 +144,3 @@ updateRender()
 const button = d3.select('body').append('button').attr('class', 'tititi')
   .text('Next set of actors')
   button.on('click', () => {updateRender(pages.second)})
-
-  voor jou is pages = allhouses of allgenders
