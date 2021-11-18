@@ -19,7 +19,6 @@ const dimensions = {
 const SVG = d3.select('body').append('div').attr('id', 'graph').append('svg')
   .attr('width', dimensions.width + dimensions.margin.l + dimensions.margin.r)
   .attr('height', dimensions.height + dimensions.margin.t + dimensions.margin.b + 50)
-  // .style('border', '1px solid black')
   .append('g')
     .attr('class', 'barChart')
     .attr('transform', `translate(${dimensions.margin.l}, ${dimensions.margin.t})`)
@@ -64,7 +63,7 @@ const SVG = d3.select('body').append('div').attr('id', 'graph').append('svg')
 // }
 
 //setup scales
-const xscale = d3.scaleBand().range([0, dimensions.width]).paddingInner(0.2)
+const xscale = d3.scaleBand().range([0, dimensions.width]).padding(0.2)
 const yscale = d3.scaleLinear().range([dimensions.height, 0])
 
 //setup axis
@@ -81,9 +80,10 @@ const group_yaxis = SVG.append('g').attr('class', 'y axis')
  * @param {JSON} data data from an API endpoint, specifically data sanitized by sanitizeData()
  */
 async function render(data) {
-  // const svg = d3.select('svg')
+
   xscale.domain(data.map(d => d.name))
   yscale.domain([0, d3.max(data, d=> {return d.rating})])
+
   // render the axis
   group_xaxis.transition().call(xaxis)
     .selectAll('text')
@@ -104,10 +104,9 @@ async function render(data) {
         return r
     },
     (update) => {
-      return update.transition().style('fill', '#FFCC00')
+      return update.style('fill', '#AB7E6D').transition()
     },
     (exit) => {return exit.remove()})
-
 
     rec
       .transition()
@@ -119,44 +118,47 @@ async function render(data) {
         .attr('y', (d) => {return yscale(d.rating)})
         .transition()
           .attr('height', (d) => {return dimensions.height - yscale(d.rating)})  
-          .select('title').text(d => {return `${d.name}: ${d.rating}`})
+          .select('title').text(d => {return `${d.name}: ${d.rating}`});
 
-  const rec_num = SVG
-    .selectAll('.text')
-    .data(data)
-    .join(
-      (enter) => {
-        const t = enter.append('text');
-         t
-          .transition()
-          .ease(d3.easeLinear)
-          .delay((d,i) => {return i*50})
-        return t
-      },
-      (update) => {
-        return update.style('opacity', 0.5)
-      },
-      (exit) => {
-        return exit.remove()
-      }
-    )
 
-    // .append('text')
-    rec_num
-      .attr('opacity', 0)
-      .transition()
-      .text((d) => {return d.rating})
-      .attr('x', (d) => {return xscale(d.name) + xscale.bandwidth() / 2})
-      .attr('y', (d) => {return yscale(d.rating) + 14})
-      .attr('font-size', '11px')
-      .attr('fill', 'white')
-      .attr('text-anchor', 'middle')
-        .transition()
-        .ease(d3.easeQuadIn)
-        .delay((d,i) => {return i*100})
-        .attr('opacity', 1)
+      
+  // const rec_num = SVG
+  //   .selectAll('.text')
+  //   .data(data)
+  //   .join(
+  //     (enter) => {
+  //       const t = enter.append('text');
+  //        t
+  //         .transition()
+  //         .ease(d3.easeLinear)
+  //         .delay((d,i) => {return i*50})
+  //       return t
+  //     },
+  //     (update) => {
+  //       return update.style('opacity', 0.5)
+  //     },
+  //     (exit) => {
+  //       return exit.remove()
+  //     }
+  //   )
 
-      }
+  //   // .append('text')
+  //   rec_num
+  //     .attr('opacity', 0)
+  //     .transition()
+  //     .text((d) => {return d.rating})
+  //     .attr('x', (d) => {return xscale(d.name) + xscale.bandwidth() / 2})
+  //     .attr('y', (d) => {return yscale(d.rating) + 14})
+  //     .attr('font-size', '11px')
+  //     .attr('fill', 'white')
+  //     .attr('text-anchor', 'middle')
+  //       .transition()
+  //       .ease(d3.easeQuadIn)
+  //       .delay((d,i) => {return i*100})
+  //       .attr('opacity', 1)
+
+}
+
 
 const pages = {
   first: await sanitizeData(await dataset(API)),
