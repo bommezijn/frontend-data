@@ -3,8 +3,13 @@
 }
 
 body {
-  /* background-color: #110523; */
+  background-color: #110523;
 }
+
+.axis > * {
+  color: #8C7F98;
+  font-size: 12px;
+}  
 
 .bar {
   fill: #B61544;
