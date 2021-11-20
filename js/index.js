@@ -5,7 +5,7 @@ const API = 'https://api.themoviedb.org/3/person/popular?api_key=63b8e2e812b6172
 //Define dimensions used for the SVG, width and height are a calculation, so for objects its a getter function
 const dimensions = {
   margin: {t:20, r: 20, b: 30, l: 40},
-  get width() {return 960 - this.margin.l - this.margin.r},
+  get width() {return window.innerWidth - this.margin.l - this.margin.r},
   get height() {return 600 - this.margin.t - this.margin.b}
 }
 
@@ -124,7 +124,7 @@ async function render(data) {
 
       
   // const rec_num = SVG
-  //   .selectAll('.text')
+  //   d3.selectAll('p')
   //   .data(data)
   //   .join(
   //     (enter) => {
@@ -176,6 +176,8 @@ const pages = {
   6: await sanitizeData(await dataset(`${API}&page=7`)),
   7: await sanitizeData(await dataset(`${API}&page=8`))
 }
+
+// console.log()
 
 const updateRender = (endPoint = pages[0]) => {
   render(endPoint)
