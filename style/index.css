@@ -7,6 +7,10 @@ body {
   background-color: #110523;
 }
 
+#graph {
+  width: clamp(400px, 200em ,800px)
+}
+
 .axis > * {
   color: #8C7F9850;
   font-size: 12px;
