@@ -5,7 +5,7 @@ const API = 'https://api.themoviedb.org/3/person/popular?api_key=63b8e2e812b6172
 //Define dimensions used for the SVG, width and height are a calculation, so for objects its a getter function
 const dimensions = {
   margin: {t:20, r: 20, b: 30, l: 40},
-  get width() {return window.innerWidth - this.margin.l - this.margin.r},
+  get width() {return document.getElementById('graph').offsetWidth - this.margin.l - this.margin.r},
   get height() {return 600 - this.margin.t - this.margin.b}
 }
 
