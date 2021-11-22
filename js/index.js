@@ -160,34 +160,23 @@ async function render(data) {
 
 }
 
-
-
-/* 
-  Ultra ugly way of iterating through the data. With a hard stop.
-  Should update it to something that is dynamic.
-*/
-const pages = {
-  0: await sanitizeData(await dataset(`${API}&page=1`)),
-  1: await sanitizeData(await dataset(`${API}&page=2`)),
-  2: await sanitizeData(await dataset(`${API}&page=3`)),
-  3: await sanitizeData(await dataset(`${API}&page=4`)),
-  4: await sanitizeData(await dataset(`${API}&page=5`)),
-  5: await sanitizeData(await dataset(`${API}&page=6`)),
-  6: await sanitizeData(await dataset(`${API}&page=7`)),
-  7: await sanitizeData(await dataset(`${API}&page=8`))
-}
-
-// console.log()
-
-const updateRender = (endPoint = pages[0]) => {
+const initialPage = await sanitizeData(await dataset(`${API}&page=1`))
+const updateRender = (endPoint = initialPage) => {
   render(endPoint)
 }
 
 updateRender()
-let i = 0;
+let i = 1;
+
+const getNextPage = async () => {
+  i++;
+  let response = await fetch(`${API}&page=${i}`)
+  let page = await response.json()
+  return await sanitizeData(page)
+}
 
 const button = d3.select('.next')
-  button.on('click', () => {
-    i++
-    updateRender(pages[i])
+  button.on('click', async () => {
+    const data = await getNextPage()
+    updateRender(data)
   })
